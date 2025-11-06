@@ -1,0 +1,194 @@
+<!-- 💬 Arun's AI Assistant Section -->
+<style>
+/* Floating robot button */
+#chatbot-toggle {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f5ed04, #ff5e62);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+  animation: float 2.5s ease-in-out infinite;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+
+#chatbot-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 12px 35px rgba(0,0,0,0.5);
+}
+
+/* Robot image */
+#chatbot-toggle img {
+  width: 95%;
+  height: 105%;
+  animation: blink 4s infinite, wave 3s ease-in-out infinite;
+}
+
+/* Floating animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Blinking eyes animation */
+@keyframes blink {
+  0%, 90%, 100% { filter: brightness(1); }
+  95% { filter: brightness(0.2); }
+}
+
+/* Waving rotation animation */
+@keyframes wave {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(10deg); }
+}
+
+/* Chat box glass effect */
+#chatbot-box {
+  position: fixed;
+  bottom: 130px;
+  right: 25px;
+  width: 370px;
+  max-height: 520px;
+  background: rgba(26,26,46,0.85);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  padding: 15px;
+  display: none;
+  flex-direction: column;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  z-index: 9999;
+}
+
+/* Header */
+#chatbot-header {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ff5e62;
+  text-align: center;
+  margin-bottom: 10px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+/* Chat output */
+#chatbot-output {
+  background: rgba(42,42,64,0.7);
+  flex: 1;
+  overflow-y: auto;
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #fff;
+}
+.user-msg { color: #ff5e62; font-weight: bold; margin-bottom: 6px; }
+.ai-msg { color: #00ffe3; margin-bottom: 6px; }
+
+/* Input area */
+#chatbot-input-container {
+  display: flex;
+  gap: 8px;
+}
+#chatbot-input {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: none;
+  font-size: 14px;
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+}
+#chatbot-input::placeholder { color: #ccc; }
+
+#chatbot-send {
+  background: linear-gradient(135deg, #cb11a6, #ff5e62);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 12px;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+#chatbot-send:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
+
+/* Scrollbar styling */
+#chatbot-output::-webkit-scrollbar { width: 6px; }
+#chatbot-output::-webkit-scrollbar-thumb { background: #ff5e62; border-radius: 3px; }
+</style>
+
+<!-- Floating Robot Button -->
+<button id="chatbot-toggle" title="Chat with Arun’s AI Assistant">
+  <img src="https://i.postimg.cc/tCM0pGdR/robo.jpg" alt="Chatbot Robot">
+</button>
+
+<!-- Chat Box -->
+<div id="chatbot-box">
+  <div id="chatbot-header">Arun’s AI Assistant 🤖</div>
+  <div id="chatbot-output"></div>
+  <div id="chatbot-input-container">
+    <input id="chatbot-input" placeholder="Ask me anything..." />
+    <button id="chatbot-send">Send</button>
+  </div>
+</div>
+
+<script>
+const toggleBtn = document.getElementById('chatbot-toggle');
+const chatBox = document.getElementById('chatbot-box');
+const chatOutput = document.getElementById('chatbot-output');
+const chatInput = document.getElementById('chatbot-input');
+const chatSend = document.getElementById('chatbot-send');
+
+// 🧠 Add welcome message when chat opens
+toggleBtn.addEventListener('click', () => {
+  if (chatBox.style.display === 'none' || chatBox.style.display === '') {
+    chatBox.style.display = 'flex';
+    if (chatOutput.innerHTML.trim() === '') {
+      chatOutput.innerHTML = `<p class="ai-msg">🤖 Hey there! I'm Arun’s AI Assistant.<br>Ask me anything about Arun Kumar, his AWS skills, projects, or this website!</p>`;
+    }
+  } else {
+    chatBox.style.display = 'none';
+  }
+});
+
+// 🚀 Send message to Lambda
+async function sendMessage() {
+  const userMsg = chatInput.value.trim();
+  if (!userMsg) return;
+
+  chatOutput.innerHTML += `<p class="user-msg">You: ${userMsg}</p>`;
+  chatOutput.scrollTop = chatOutput.scrollHeight;
+  chatInput.value = '';
+
+  try {
+    const response = await fetch("https://aw2l7wpaenhawmtteezrkzkzem0xlosg.lambda-url.eu-north-1.on.aws/", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ message: userMsg })
+    });
+
+    const data = await response.json();
+    const aiReply = data.reply || "Sorry, I couldn't get a response.";
+    chatOutput.innerHTML += `<p class="ai-msg">AI: ${aiReply}</p>`;
+    chatOutput.scrollTop = chatOutput.scrollHeight;
+
+  } catch (err) {
+    chatOutput.innerHTML += `<p class="ai-msg" style="color:red;">AI: Error connecting to Lambda</p>`;
+  }
+}
+
+// Enter key sends message
+chatSend.addEventListener('click', sendMessage);
+chatInput.addEventListener('keydown', (e) => { if (e.key === "Enter") sendMessage(); });
+</script>

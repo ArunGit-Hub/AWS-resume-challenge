@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Visitors</title>
+</head>
+<body>
+<h1>Live Visitors: <span id="liveCount">0</span></h1>
+
+<script type="module">
+// 1️⃣ Import Firebase modules
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+import { getDatabase, ref, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-database.js";
+
+// 2️⃣ Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCWUEMZELomn5qz_nPcbGvIL8cPavCv1_E",
+  authDomain: "arun-resume-live-counter.firebaseapp.com",
+  databaseURL: "https://arun-resume-live-counter-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "arun-resume-live-counter",
+  storageBucket: "arun-resume-live-counter.firebasestorage.app",
+  messagingSenderId: "542521840273",
+  appId: "1:542521840273:web:c31374e181668b674aa530",
+  measurementId: "G-9D2PCYMMKB"
+};
+
+// 3️⃣ Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// 4️⃣ Create a unique visitor ID per browser (persistent across tabs)
+let visitorId = localStorage.getItem("visitorId");
+if (!visitorId) {
+  visitorId = "visitor_" + Date.now() + "_" + Math.floor(Math.random()*1000);
+  localStorage.setItem("visitorId", visitorId);
+}
+
+// 5️⃣ Reference to liveVisitors node
+const liveVisitorsRef = ref(db, "liveVisitors/" + visitorId);
+
+// 6️⃣ Add visitor when page loads
+set(liveVisitorsRef, true);
+
+// 7️⃣ Remove visitor when browser/tab is closed
+window.addEventListener("beforeunload", () => {
+  remove(liveVisitorsRef);
+});
+
+// 8️⃣ Listen for live visitor count
+const liveCountSpan = document.getElementById("liveCount");
+const liveVisitorsNode = ref(db, "liveVisitors");
+onValue(liveVisitorsNode, (snapshot) => {
+  const count = snapshot.size || Object.keys(snapshot.val() || {}).length;
+  liveCountSpan.innerText = count;
+});
+</script>
+</body>
+</html>

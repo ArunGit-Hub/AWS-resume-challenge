@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arun Kumar | Cloud Resume</title>
+<style>
+body { font-family: Arial; padding: 20px; background: #f4f4f4; }
+h1 { color: #222; }
+.counter { margin-top: 20px; font-size: 1.2rem; color: #555; }
+</style>
+</head>
+<body>
+<h1>Arun Kumar</h1>
+<p>Welcome to my Cloud Resume Challenge page! 🚀</p>
+
+<div class="counter">
+  Total Visitors: <span id="visitor-count">Loading...</span>
+</div>
+
+<script>
+async function updateVisitorCount() {
+  const apiUrl = "https://r46t5mxwetztmm4gd4pp4hy7py0xhgpm.lambda-url.eu-north-1.on.aws/";
+
+  if (!localStorage.getItem("visited")) {
+    // first visit -> increment count
+    try {
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+      document.getElementById('visitor-count').innerText = data.total_count;
+      localStorage.setItem("visited", "true"); // mark visited
+    } catch (err) {
+      console.error(err);
+      document.getElementById('visitor-count').innerText = "Error 😅";
+    }
+  } else {
+    // revisits -> read-only fetch
+    try {
+      const response = await fetch(apiUrl + "?read_only=true");
+      const data = await response.json();
+      document.getElementById('visitor-count').innerText = data.total_count;
+    } catch (err) {
+      console.error(err);
+      document.getElementById('visitor-count').innerText = "Error 😅";
+    }
+  }
+}
+
+updateVisitorCount();
+</script>
+</body>
+</html>

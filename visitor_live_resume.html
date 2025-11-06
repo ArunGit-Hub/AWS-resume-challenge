@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arunkumar Kanakaraj - AWS Cloud Practitioner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #cb11a6;
+            --secondary: #2575fcc7;
+            --accent: #ff2d75;
+            --accent2: #ff9a00;
+            --dark: #1a1a2e;
+            --light: #e6e6e6;
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #9c0694 100%);
+            color: var(--light);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(106, 17, 203, 0.1);
+            animation: float 15s infinite linear;
+        }
+
+        .bg-bubble:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .bg-bubble:nth-child(2) {
+            width: 100px;
+            height: 100px;
+            top: 60%;
+            left: 80%;
+            animation-delay: 2s;
+            background: rgba(37, 117, 252, 0.1);
+        }
+
+        .bg-bubble:nth-child(3) {
+            width: 120px;
+            height: 120px;
+            top: 40%;
+            left: 70%;
+            animation-delay: 4s;
+            background: rgba(255, 45, 117, 0.1);
+        }
+
+        .bg-bubble:nth-child(4) {
+            width: 60px;
+            height: 60px;
+            top: 80%;
+            left: 40%;
+            animation-delay: 6s;
+            background: rgba(255, 154, 0, 0.1);
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.5;
+            }
+            33% {
+                transform: translateY(-30px) rotate(120deg);
+                opacity: 0.7;
+            }
+            66% {
+                transform: translateY(20px) rotate(240deg);
+                opacity: 0.3;
+            }
+        }
+
+        .resume-wrapper {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+            animation: fadeInScale 1s ease-out;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 10s ease infinite, headerGlow 5s ease-in-out infinite alternate;
+            color: var(--white);
+            padding: 70px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes headerGlow {
+            0% { box-shadow: 0 0 20px rgba(106, 17, 203, 0.5); }
+            100% { box-shadow: 0 0 30px rgba(37, 117, 252, 0.7); }
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: 
+                radial-gradient(circle, rgba(255,255,255,0.15) 2px, transparent 2px),
+                radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px, 30px 30px;
+            background-position: 0 0, 25px 25px;
+            animation: particleFloat 20s linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes particleFloat {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50px); }
+        }
+
+        .profile-img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 6px solid rgba(255, 255, 255, 0.4);
+            object-fit: cover;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 10;
+            transition: all 0.5s ease;
+        }
+
+        @keyframes floatProfile {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes profileGlow {
+            0% { box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); }
+            100% { box-shadow: 0 15px 40px rgba(106, 17, 203, 0.6); }
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            font-weight: 800;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 10;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #fff, #e0e0ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: textShine 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes textShine {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        .header .title {
+            font-size: 1.4em;
+            font-weight: 400;
+            margin-bottom: 20px;
+            opacity: 0.95;
+            position: relative;
+            z-index: 10;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Updated Visitor Counter Styles */
+        #visitor-counter {
+            background: rgba(255, 255, 255, 0.15);
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 30px;
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 25px;
+            border: 2px solid rgba(255,255,255,0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+            animation: counterPulse 4s infinite;
+        }
+
+        @keyframes counterPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .counter-item {
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .counter-icon {
+            font-size: 1.2em;
+        }
+
+        .counter-text {
+            font-size: 1em;
+        }
+
+        .counter-value {
+            font-size: 1.1em;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            min-width: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .counter-value.active {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: #1e293b;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { 
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(67, 233, 123, 0.7);
+            }
+            50% { 
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(67, 233, 123, 0);
+            }
+            100% { 
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(67, 233, 123, 0);
+            }
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 10;
+        }
+
+        .contact-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.4s ease;
+            padding: 12px 25px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .contact-links a:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent);
+        }
+
+        /* CONTENT */
+        .content { 
+            padding: 60px 40px; 
+            background: rgba(26, 26, 46, 0.7);
+        }
+
+        .section {
+            margin-bottom: 50px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease;
+        }
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .section-title {
+            font-size: 2.3em;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 80px; height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 2px;
+            animation: lineExtend 2s ease-out;
+        }
+
+        @keyframes lineExtend {
+            0% { width: 0; }
+            100% { width: 80px; }
+        }
+
+        .about-text {
+            font-size: 1.15em;
+            color: var(--light);
+            line-height: 1.9;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid var(--primary);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+            transition: all 0.4s ease;
+        }
+
+        .about-text:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(106, 17, 203, 0.3);
+        }
+
+        .edu-item {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 6px solid var(--primary);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+        .edu-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border-left-color: var(--accent);
+        }
+        .edu-item h3 {
+            font-size: 1.6em;
+            color: var(--white);
+            margin-bottom: 10px;
+        }
+        .edu-item p {
+            color: var(--light);
+            font-size: 1.1em;
+        }
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+        }
+        .skill-card {
+            padding: 25px 15px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            color: var(--white);
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+        }
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+        .skill-card:hover::before {
+            left: 100%;
+        }
+        .skill-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.3);
+        }
+        .skill-card i { 
+            font-size: 2.5em; 
+            margin-bottom: 15px; 
+            transition: all 0.3s ease;
+        }
+        .skill-card:hover i {
+            transform: scale(1.2);
+        }
+        .skill-card h3 { font-size: 1.1em; font-weight: 600; }
+        .skill-card:nth-child(1){ background: linear-gradient(135deg,#6a11cb 0%,#2575fc 100%);}
+        .skill-card:nth-child(2){ background: linear-gradient(135deg,#ff2d75 0%,#ff9a00 100%);}
+        .skill-card:nth-child(3){ background: linear-gradient(135deg,#00c6fb 0%,#005bea 100%);}
+        .skill-card:nth-child(4){ background: linear-gradient(135deg,#43e97b 0%,#38f9d7 100%);}
+        .skill-card:nth-child(5){ background: linear-gradient(135deg,#6a11cb 0%,#2575fc 100%);}
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        .achievement-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            backdrop-filter: blur(5px);
+        }
+        .achievement-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border-color: var(--primary);
+        }
+        .achievement-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 2em;
+            color: var(--white);
+            transition: all 0.4s ease;
+        }
+        .achievement-card:hover .achievement-icon {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+        }
+        .achievement-card h3 { font-size: 1.4em; color: var(--white); margin-bottom: 10px; }
+        .achievement-card p { color: var(--light); line-height: 1.7; }
+
+        /* Download Button at Bottom */
+        .download-section {
+            text-align: center;
+            margin-top: 40px;
+            padding: 40px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 2px dashed var(--primary);
+            backdrop-filter: blur(5px);
+            transition: all 0.4s ease;
+        }
+
+        .download-section:hover {
+            border: 2px dashed var(--accent);
+            box-shadow: 0 10px 30px rgba(106, 17, 203, 0.2);
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            text-decoration: none;
+            font-size: 1.3em;
+            font-weight: 600;
+            padding: 16px 40px;
+            border-radius: 50px;
+            transition: all 0.4s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.6);
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: 0.5s;
+        }
+
+        .download-btn:hover::before {
+            left: 100%;
+        }
+
+        .download-text {
+            font-size: 1.2em;
+            color: var(--light);
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        /* Footer Section */
+        .footer-section {
+            text-align: center;
+            margin-top: 20px;
+            padding: 30px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            color: var(--white);
+            border-radius: 20px;
+            animation: footerGlow 5s infinite alternate;
+        }
+
+        @keyframes footerGlow {
+            0% { box-shadow: 0 0 20px rgba(106, 17, 203, 0.5); }
+            100% { box-shadow: 0 0 30px rgba(37, 117, 252, 0.7); }
+        }
+
+        .footer-text {
+            font-size: 1.3em;
+            font-weight: 500;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .footer-subtext {
+            font-size: 1em;
+            color: hsl(210, 14%, 97%);
+            opacity: 0.8;
+        }
+
+        .heart-icon {
+            color: #ef4444;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Loading animation for counters */
+        .loading {
+            opacity: 0.7;
+            animation: loadingPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes loadingPulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="bg-bubble"></div>
+        <div class="bg-bubble"></div>
+        <div class="bg-bubble"></div>
+        <div class="bg-bubble"></div>
+    </div>
+
+    <div class="resume-wrapper">
+        <header class="header">
+            <img src="https://i.postimg.cc/tJ4sjDxB/a-pass-photo.jpg" alt="Arunkumar Kanakaraj" class="profile-img">
+            <h1>Arunkumar Kanakaraj</h1>
+            <p class="title">Aspiring AWS Cloud Practitioner</p>
+
+            <!-- 🔥 BOTH COUNTERS WORKING -->
+            <div id="visitor-counter">
+                <div class="counter-item">
+                    <span class="counter-icon">👁️</span>
+                    <span class="counter-text">Total Visitors: </span>
+                    <span class="counter-value loading" id="total-count">Loading...</span>
+                </div>
+                <div class="counter-item">
+                    <span class="counter-icon">🔥</span>
+                    <span class="counter-text">Live Now: </span>
+                    <span class="counter-value" id="active-count">0</span>
+                </div>
+            </div>
+
+            <div class="contact-links">
+                <a href="mailto:arunseethaseetha2104@gmail.com">
+                    <i class="fas fa-envelope"></i> arunseethaseetha2104@gmail.com
+                </a>
+                <a href="tel:9994363342">
+                    <i class="fas fa-phone-alt"></i> +91 99943 63342
+                </a>
+                <a href="https://www.linkedin.com/in/aruncloud-kanakaraj" target="_blank">
+                    <i class="fab fa-linkedin"></i> LinkedIn Profile
+                </a>
+            </div>
+        </header>
+
+        <main class="content">
+            <section class="section" id="about">
+                <h2 class="section-title"><i class="fas fa-user-circle"></i> About Me</h2>
+                <p class="about-text">
+                    Aspiring AWS Cloud Practitioner skilled in deploying and managing cloud-based solutions.
+                    Strong understanding of AWS services, DevOps workflows, and automation practices,
+                    with a focus on learning and improving through real-world experience.
+                </p>
+            </section>
+
+            <section class="section" id="education">
+                <h2 class="section-title"><i class="fas fa-graduation-cap"></i> Education</h2>
+                <div class="edu-item">
+                    <h3>Bachelor of Science in Computer Science</h3>
+                    <p>KPR college of arts science and research(2021-2024)</p>
+                </div>
+            </section>
+
+            <section class="section" id="skills">
+                <h2 class="section-title"><i class="fas fa-code"></i> Skills</h2>
+                <div class="skills-grid">
+                    <div class="skill-card"><i class="fas fa-cloud-upload-alt"></i><h3>Cloud Deployment</h3></div>
+                    <div class="skill-card"><i class="fas fa-server"></i><h3>Web Hosting</h3></div>
+                    <div class="skill-card"><i class="fab fa-shopify"></i><h3>Shopify Customization</h3></div>
+                    <div class="skill-card"><i class="fas fa-mobile-alt"></i><h3>Responsive Design</h3></div>
+                    <div class="skill-card"><i class="fab fa-aws"></i><h3>AWS Services</h3></div>
+                </div>
+            </section>
+
+            <section class="section" id="achievements">
+                <h2 class="section-title"><i class="fas fa-trophy"></i> Achievements</h2>
+                <div class="achievements-grid">
+                    <div class="achievement-card">
+                        <div class="achievement-icon"><i class="fas fa-medal"></i></div>
+                        <h3>Poster Design Competition</h3>
+                        <p>Secured first place in a college-level poster design competition, showcasing creativity and design skills.</p>
+                    </div>
+                    <div class="achievement-card">
+                        <div class="achievement-icon"><i class="fas fa-shopping-cart"></i></div>
+                        <h3>E-commerce Development</h3>
+                        <p>Developed multiple successful e-commerce stores using Shopify, implementing custom features and responsive designs.</p>
+                    </div>
+                    <div class="achievement-card">
+                        <div class="achievement-icon"><i class="fas fa-cloud"></i></div>
+                        <h3>Cloud Solutions Deployment</h3>
+                        <p>Successfully deployed and managed cloud solutions for multiple clients, improving performance and reducing costs.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Download Resume Section -->
+            <section class="section download-section">
+                <h2 class="section-title" style="justify-content: center;"><i class="fas fa-file-download"></i> Download My Resume</h2>
+                <p class="download-text">Get a printable version of my resume for your records</p>
+                <a href="https://arun-cloud-resume.s3.eu-north-1.amazonaws.com/ArunKumar_Resume.pdf" class="download-btn" download="Arunkumar_Kanakaraj_Resume.pdf">
+                    <i class="fas fa-download"></i> Download PDF Resume
+                </a>
+            </section>
+
+            <!-- Footer Section -->
+            <section class="section footer-section">
+                <p class="footer-text">
+                    <i class="fas fa-heart heart-icon"></i>
+                    Thank you for visiting my online resume webpage!
+                    <i class="fas fa-heart heart-icon"></i>
+                </p>
+                <p class="footer-subtext">Built with AWS Cloud Services • Hosted on S3 • Visitor Counter powered by Lambda & DynamoDB • Live Counter powered by Firebase</p>
+            </section>
+        </main>
+    </div>
+
+    <!-- ==================== COUNTER SCRIPT ==================== -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+        import { getDatabase, ref, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-database.js";
+
+        // 🔹 Firebase Setup
+        const firebaseConfig = {
+            apiKey: "AIzaSyCWUEMZELomn5qz_nPcbGvIL8cPavCv1_E",
+            authDomain: "arun-resume-live-counter.firebaseapp.com",
+            databaseURL: "https://arun-resume-live-counter-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "arun-resume-live-counter",
+            storageBucket: "arun-resume-live-counter.firebasestorage.app",
+            messagingSenderId: "542521840273",
+            appId: "1:542521840273:web:c31374e181668b674aa530",
+            measurementId: "G-9D2PCYMMKB"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // 🔹 Live Visitor ID
+        let visitorId = localStorage.getItem("visitorId");
+        if (!visitorId) {
+            visitorId = "visitor_" + Date.now() + "_" + Math.floor(Math.random()*1000);
+            localStorage.setItem("visitorId", visitorId);
+        }
+
+        const liveVisitorsRef = ref(db, "liveVisitors/" + visitorId);
+        
+        // Add visitor when page loads
+        set(liveVisitorsRef, true);
+        
+        // Remove visitor when browser/tab is closed
+        window.addEventListener("beforeunload", () => {
+            remove(liveVisitorsRef);
+        });
+
+        // Listen for live visitor count
+        const liveCountSpan = document.getElementById("active-count");
+        const liveVisitorsNode = ref(db, "liveVisitors");
+        
+        onValue(liveVisitorsNode, (snapshot) => {
+            const data = snapshot.val();
+            const count = data ? Object.keys(data).length : 0;
+            liveCountSpan.innerText = count;
+            if (count > 0) {
+                liveCountSpan.classList.add('active');
+            }
+        });
+
+        // 🔹 Total Visitor Counter (AWS Lambda)
+        async function updateVisitorCount() {
+            const apiUrl = "https://r46t5mxwetztmm4gd4pp4hy7py0xhgpm.lambda-url.eu-north-1.on.aws/";
+            const totalElement = document.getElementById('total-count');
+
+            if (!localStorage.getItem("visited")) {
+                // First visit - increment count
+                try {
+                    const response = await fetch(apiUrl);
+                    const data = await response.json();
+                    totalElement.textContent = data.total_count || '0';
+                    totalElement.classList.remove('loading');
+                    localStorage.setItem("visited", "true");
+                } catch (err) {
+                    console.error("Error updating total count:", err);
+                    totalElement.textContent = "0";
+                    totalElement.classList.remove('loading');
+                }
+            } else {
+                // Subsequent visits - read only
+                try {
+                    const response = await fetch(apiUrl + "?read_only=true");
+                    const data = await response.json();
+                    totalElement.textContent = data.total_count || '0';
+                    totalElement.classList.remove('loading');
+                } catch (err) {
+                    console.error("Error fetching total count:", err);
+                    totalElement.textContent = "0";
+                    totalElement.classList.remove('loading');
+                }
+            }
+        }
+
+        // Initialize counters when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Scroll animation for sections
+            const sections = document.querySelectorAll('.section');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            sections.forEach(section => observer.observe(section));
+            
+            // Initialize counters
+            updateVisitorCount();
+        });
+
+    </script>
+</body>
+</html>
